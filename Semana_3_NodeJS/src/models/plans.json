@@ -1,0 +1,4 @@
+[{"id": "1", "name": "Basic Plan", "price": 9.99, "max_books_per_month": 5, "description": "Basic subscription plan"},
+{"id": "2", "name": "Premium Plan", "price": 19.99, "max_books_per_month": 10, "description": "Premium subscription plan"},
+{"id": "3", "name": "Enterprise Plan", "price": 29.99, "max_books_per_month": 20, "description": "Enterprise subscription plan"}
+]

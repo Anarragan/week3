@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1",
+    "user_id": "2",
+    "type": "loan_request",
+    "message": "Juan Pérez ha solicitado prestado tu libro 'El Principito'",
+    "read": false,
+    "created_at": "2024-09-22T08:30:00Z"
+  },
+  {
+    "id": "2",
+    "user_id": "1",
+    "type": "loan_due",
+    "message": "Tu préstamo del libro 'Cien años de soledad' vence mañana",
+    "read": true,
+    "created_at": "2024-09-21T10:00:00Z"
+  },
+  {
+    "id": "3",
+    "user_id": "4",
+    "type": "loan_overdue",
+    "message": "Tu préstamo del libro 'Don Quijote' está vencido. Por favor devuélvelo",
+    "read": false,
+    "created_at": "2024-09-21T12:15:00Z"
+  },
+  {
+    "id": "4",
+    "user_id": "3",
+    "type": "loan_approved",
+    "message": "Tu solicitud de préstamo para 'Harry Potter' ha sido aprobada",
+    "read": true,
+    "created_at": "2024-09-20T16:45:00Z"
+  },
+  {
+    "id": "5",
+    "user_id": "1",
+    "type": "book_returned",
+    "message": "María García ha devuelto tu libro 'El Hobbit'",
+    "read": false,
+    "created_at": "2024-09-19T14:20:00Z"
+  },
+  {
+    "id": "6",
+    "user_id": "5",
+    "type": "subscription_expiring",
+    "message": "Tu suscripción Premium expira en 3 días",
+    "read": false,
+    "created_at": "2024-09-22T09:00:00Z"
+  },
+  {
+    "id": "7",
+    "user_id": "2",
+    "type": "new_review",
+    "message": "Carlos López ha dejado una reseña en tu libro 'Orgullo y prejuicio'",
+    "read": true,
+    "created_at": "2024-09-18T11:30:00Z"
+  }
+]

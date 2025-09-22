@@ -1,0 +1,57 @@
+[{
+    "id": "1",
+    "book_id": "1",
+    "reviewer_id": "2",
+    "rating": 5,
+    "comment": "Excelente libro, muy bien cuidado. La historia es fascinante y el propietario fue muy amable en el intercambio.",
+    "created_at": "2024-09-15T14:30:00Z"
+  },
+  {
+    "id": "2",
+    "book_id": "3",
+    "reviewer_id": "1",
+    "rating": 4,
+    "comment": "Buen libro, aunque tiene algunas páginas un poco desgastadas. La entrega fue puntual.",
+    "created_at": "2024-09-10T16:45:00Z"
+  },
+  {
+    "id": "3",
+    "book_id": "2",
+    "reviewer_id": "4",
+    "rating": 3,
+    "comment": "El libro está en condiciones aceptables. La historia es buena pero esperaba mejor estado físico.",
+    "created_at": "2024-09-08T10:20:00Z"
+  },
+  {
+    "id": "4",
+    "book_id": "5",
+    "reviewer_id": "3",
+    "rating": 5,
+    "comment": "¡Increíble! El libro estaba como nuevo y la experiencia de intercambio fue perfecta. Muy recomendado.",
+    "created_at": "2024-09-05T13:15:00Z"
+  },
+  {
+    "id": "5",
+    "book_id": "4",
+    "reviewer_id": "5",
+    "rating": 4,
+    "comment": "Gran lectura, el propietario fue muy flexible con las fechas. El libro tiene algunas anotaciones pero no molestan.",
+    "created_at": "2024-09-02T09:00:00Z"
+  },
+  {
+    "id": "6",
+    "book_id": "1",
+    "reviewer_id": "3",
+    "rating": 5,
+    "comment": "Una joya literaria en perfectas condiciones. El intercambio fue súper fácil y rápido.",
+    "created_at": "2024-08-28T15:45:00Z"
+  },
+  {
+    "id": "7",
+    "book_id": "3",
+    "reviewer_id": "5",
+    "rating": 2,
+    "comment": "El libro tenía más daños de los esperados y el propietario no fue muy comunicativo.",
+    "created_at": "2024-08-25T11:30:00Z"
+  }
+]

@@ -1,0 +1,9 @@
+[{"id": "1","book_id": "1","condition": "new","availability_status": "available"},
+{ "id": "2","book_id": "2","condition": "good","availability_status": "borrowed"},
+{"id": "3","book_id": "2","condition": "worn","availability_status": "available"},
+{"id": "4","book_id": "3","condition": "good","availability_status": "available"},
+{"id": "5","book_id": "4","condition": "new","availability_status": "borrowed"},
+{"id": "6","book_id": "5","condition": "good","availability_status": "available"},
+{"id": "7","book_id": "1","condition": "worn","availability_status": "available"},
+{"id": "8","book_id": "3","condition": "new","availability_status": "available"}
+]
