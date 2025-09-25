@@ -46,7 +46,7 @@ export const addBook = async (req: Request, res: Response) => {
             language: req.body.language,
             cover_url: req.body.cover_url,
             description: req.body.description,
-            owner_id: req.body.owner_id,
+            user_id: req.body.user_id,
             created_at: new Date().toISOString(),
             book_copies: req.body.book_copies ?? 1
         };
@@ -80,7 +80,7 @@ export const deleteBook = async (req: Request, res: Response ) => {
 export const updateBook = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { title, author, isbn, genere, language, cover_url, description, owner_id, book_copies } = req.body;
+        const { title, author, isbn, genere, language, cover_url, description, user_id, book_copies } = req.body;
 
         if (!id) {
             return res.status(400).json({ error: "Book ID is required" });
@@ -94,7 +94,7 @@ export const updateBook = async (req: Request, res: Response) => {
         if (language !== undefined) updatedFields.language = language;
         if (cover_url !== undefined) updatedFields.cover_url = cover_url;
         if (description !== undefined) updatedFields.description = description;
-        if (owner_id !== undefined) updatedFields.owner_id = owner_id;
+        if (user_id !== undefined) updatedFields.user_id = user_id;
         if (book_copies !== undefined) updatedFields.book_copies = book_copies;
 
         const result = await updateBookService(id, updatedFields);

@@ -7,7 +7,7 @@ export interface IBook {
     language: string;
     cover_url?: string;
     description: string;
-    owner_id: string;
+    user_id: string;
     created_at: string;
     book_copies?: number;
 }
