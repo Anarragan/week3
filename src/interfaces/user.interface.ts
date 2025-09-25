@@ -8,5 +8,5 @@ export interface IUser {
     adress: string;
     role: 'user' | 'admin';
     created_at: Date; 
-    updated_at: Date; 
+    updated_at?: Date; 
 }

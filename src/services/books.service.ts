@@ -1,4 +1,4 @@
-import type {IBook, IBookUpdate} from "../interfaces/book.interface.js";
+import type {IBook} from "../interfaces/book.interface.js";
 import { promises as fs } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -42,7 +42,7 @@ export const deleteBookService = async (id: string): Promise<boolean> => {
   return true
 }
 
-export const updateBookService = async (id: string, updatedBook: IBookUpdate): Promise<IBook | null> => {
+export const updateBookService = async (id: string, updatedBook: Partial<IBook>): Promise<IBook | null> => {
   const file = await fs.readFile(booksFilePath, "utf-8")
   const books: IBook[] = JSON.parse(file)
   const index = books.findIndex((book) => book.id === id)
@@ -56,19 +56,10 @@ export const updateBookService = async (id: string, updatedBook: IBookUpdate): P
     return null;
   }
   const updated: IBook = {
+    ...existingBook,
+    ...updatedBook,
     id: existingBook.id,
-    title: updatedBook.title ?? existingBook.title,
-    author: updatedBook.author ?? existingBook.author,
-    isbn: updatedBook.isbn ?? existingBook.isbn,
-    genere: updatedBook.genere ?? existingBook.genere,
-    language: updatedBook.language ?? existingBook.language,
-    cover_url: updatedBook.cover_url ?? existingBook.cover_url,
-    description: updatedBook.description ?? existingBook.description,
-    owner_id: updatedBook.owner_id ?? existingBook.owner_id,
-    created_at: existingBook.created_at,
-    ...(updatedBook.book_copies !== undefined || existingBook.book_copies !== undefined 
-      ? { book_copies: updatedBook.book_copies ?? existingBook.book_copies } 
-      : {})
+    created_at: existingBook.created_at
   };
 
   books[index] = updated;

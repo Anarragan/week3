@@ -89,26 +89,22 @@ export const updateBook = async (req: Request, res: Response) => {
         const { title, author, isbn, genere, language, cover_url, description, owner_id, book_copies } = req.body;
 
         if (!id) {
-            return res.status(400).json({ 
-                error: "Book ID is required" 
-            });
+            return res.status(400).json({ error: "Book ID is required" });
         }
+        
+        const updatedFields: Record<string, any> = {};
+        if (title !== undefined) updatedFields.title = title;
+        if (author !== undefined) updatedFields.author = author;
+        if (isbn !== undefined) updatedFields.isbn = isbn;
+        if (genere !== undefined) updatedFields.genere = genere;
+        if (language !== undefined) updatedFields.language = language;
+        if (cover_url !== undefined) updatedFields.cover_url = cover_url;
+        if (description !== undefined) updatedFields.description = description;
+        if (owner_id !== undefined) updatedFields.owner_id = owner_id;
+        if (book_copies !== undefined) updatedFields.book_copies = book_copies;
 
-        const updatedBook = {
-            id,
-            title,
-            author,
-            isbn,
-            genere,
-            language,
-            cover_url,
-            description,
-            owner_id,
-            created_at: new Date().toISOString(),
-            book_copies: book_copies ?? 1
-        };
+        const result = await updateBookService(id, updatedFields);
 
-        const result = await updateBookService(id, updatedBook);
         if (!result) {
             return res.status(404).json({ error: "Book not found" });
         }
