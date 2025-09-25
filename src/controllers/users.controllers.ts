@@ -33,21 +33,16 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const addUser = async (req: Request, res: Response) => {
     try{
-        const { name, last_name, email, password_hash, phone, adress, role } = req.body;
-
-        if (!name || !last_name || !email || !password_hash || !phone || !adress || !role) {
-            return res.status(400).json({ error: "All fields are required" });
-        }
 
         const newUser = {
             id: (Math.random() * 1000000).toFixed(0),
-            name,
-            last_name,
-            email,
-            password_hash,
-            phone,
-            adress,
-            role,
+            name: req.body.name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            password_hash: req.body.password_hash,
+            phone: req.body.phone,
+            adress: req.body.adress,
+            role: req.body.role,
             created_at: new Date(),
         };
 

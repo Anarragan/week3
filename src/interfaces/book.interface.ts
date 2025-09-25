@@ -5,7 +5,7 @@ export interface IBook {
     isbn: string;
     genere: string;
     language: string;
-    cover_url: string;
+    cover_url?: string;
     description: string;
     owner_id: string;
     created_at: string;

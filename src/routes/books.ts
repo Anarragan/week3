@@ -1,12 +1,16 @@
 import { Router } from "express";
 import { getBooks, addBook, updateBook, getBookById, deleteBook } from "../controllers/books.controllers.js";
-
+import { validateBookMiddleware } from "../middlewares/validates.js";
+import authenticateMiddleware from "../middlewares/authenticate.js";
+import loggerMiddleware from "../middlewares/logger.js";
 const router:Router = Router();
+
+router.use(loggerMiddleware);
 
 router.get('/', getBooks);
 router.get('/:id', getBookById);
-router.post('/', addBook);
-router.put('/:id', updateBook);
-router.delete('/:id', deleteBook);
+router.post('/', authenticateMiddleware, validateBookMiddleware, addBook);
+router.put('/:id', authenticateMiddleware, validateBookMiddleware, updateBook);
+router.delete('/:id', authenticateMiddleware, deleteBook);
 
 export { router };

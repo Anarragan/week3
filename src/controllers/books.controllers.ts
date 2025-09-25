@@ -37,24 +37,18 @@ export const getBookById = async (req: Request, res: Response) => {
 
 export const addBook = async (req: Request, res: Response) => {
     try{
-        const { title, author, isbn, genere, language, cover_url, description, owner_id, book_copies } = req.body;
-
-        if (!title || !author || !isbn || !genere || !language || !cover_url || !description || !owner_id) {
-            return res.status(400).json({ error: "All fields are required" });
-        }
-
         const newBook = {
             id: (Math.random() * 1000000).toFixed(0),
-            title,
-            author,
-            isbn,
-            genere,
-            language,
-            cover_url,
-            description,
-            owner_id,
+            title: req.body.title,
+            author: req.body.author,
+            isbn: req.body.isbn,
+            genere: req.body.genere,
+            language: req.body.language,
+            cover_url: req.body.cover_url,
+            description: req.body.description,
+            owner_id: req.body.owner_id,
             created_at: new Date().toISOString(),
-            book_copies: book_copies ?? 1
+            book_copies: req.body.book_copies ?? 1
         };
 
         const addedBook = await addBookService(newBook);
