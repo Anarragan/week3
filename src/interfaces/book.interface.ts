@@ -1,5 +1,5 @@
 export interface IBook {
-    id: string;
+    id: number;
     title: string;
     author: string;
     isbn: string;
@@ -7,7 +7,7 @@ export interface IBook {
     language: string;
     cover_url?: string;
     description: string;
-    user_id: string;
-    created_at: string;
+    user_id: number;
+    created_at: Date;
     book_copies?: number;
 }

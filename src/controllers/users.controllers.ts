@@ -19,7 +19,7 @@ export const getUserById = async (req: Request, res: Response) => {
             return res.status(400).json({ error: "User ID is required" });
         }
 
-        const user = await getUserByIdService(id);
+        const user = await getUserByIdService(Number(id));
 
         if (!user) {
             return res.status(404).json({ error: "User not found" });
@@ -35,7 +35,7 @@ export const addUser = async (req: Request, res: Response) => {
     try{
 
         const newUser = {
-            id: (Math.random() * 1000000).toFixed(0),
+            id: Math.floor(Math.random() * 1000000),
             name: req.body.name,
             last_name: req.body.last_name,
             email: req.body.email,
@@ -57,26 +57,8 @@ export const addUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { name, last_name, email, password_hash, phone, adress, role } = req.body;
 
-        if (!id) {
-            return res.status(400).json({ error: "User ID is required" });
-        }
-
-        const updatedFields: Record<string, any> = {};
-        if (name !== undefined) updatedFields.name = name;
-        if (last_name !== undefined) updatedFields.last_name = last_name;
-        if (email !== undefined) updatedFields.email = email;
-        if (password_hash !== undefined) updatedFields.password_hash = password_hash;
-        if (phone !== undefined) updatedFields.phone = phone;
-        if (adress !== undefined) updatedFields.adress = adress;
-        if (role !== undefined) updatedFields.role = role;
-
-        if (Object.keys(updatedFields).length === 0) {
-            return res.status(400).json({ error: "At least one field must be provided for update" });
-        }
-
-        const updatedUser = await updateUserService(id, updatedFields);
+        const updatedUser = await updateUserService(Number(id), req.body);
 
         if (!updatedUser) {
             return res.status(404).json({ error: "User not found" });
@@ -96,7 +78,7 @@ export const deleteUser = async (req: Request, res: Response) => {
             return res.status(400).json({ error: "User ID is required" });
         }
 
-        const deleted = await deleteUserService(id);
+        const deleted = await deleteUserService(Number(id));
 
         if (!deleted) {
             return res.status(404).json({ error: "User not found" });

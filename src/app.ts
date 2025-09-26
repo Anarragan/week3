@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 import { initRoutes } from "./routes/index.js";
-
-const app = express();
+import { sequelize } from "./config/data_base_config.js";
+import { connectDB } from "./config/data_base_config.js";
 
 const corsOptions = {
     origin: 'http://localhost:5173',
@@ -10,12 +10,23 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-app.use(cors(corsOptions));
-app.use(express.json());
+export async function initializeDatabase() {
+    try {
+        await connectDB();
+        await sequelize.authenticate();
+        const app = express();
+        app.use(cors(corsOptions));
+        app.use(express.json());
 
-(async () => {
-    const routes = await initRoutes();
-    app.use('/', routes);
-})();
+        const routes = await initRoutes();
+        app.use('/', routes);
 
-export default app;
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`);
+        });
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+        process.exit(1);
+    }
+}

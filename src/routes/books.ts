@@ -9,8 +9,8 @@ router.use(loggerMiddleware);
 
 router.get('/', getBooks);
 router.get('/:id', getBookById);
-router.post('/', authenticateMiddleware, validateBookMiddleware, addBook);
-router.put('/:id', authenticateMiddleware, validateBookMiddleware, updateBook);
-router.delete('/:id', authenticateMiddleware, deleteBook);
+router.post('/', validateBookMiddleware, addBook);
+router.put('/:id', validateBookMiddleware, updateBook);
+router.delete('/:id', deleteBook);
 
 export { router };

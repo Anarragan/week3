@@ -1,23 +1,23 @@
 import type { Request, Response, NextFunction } from "express";
+import zod, { number } from "zod";
 
 export const validateBookMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const { title, author, isbn, genere, language, cover_url, description, owner_id, book_copies } = req.body;
+    const { title, author, isbn, genere, language, cover_url, description, user_id, book_copies } = req.body;
     const { id } = req.params;
     const { method } = req;
 
     if (method === 'POST') {
-        if (!title || !author || !isbn || !genere || !language || !cover_url || !description || !owner_id) {
+        if (!title || !author || !isbn || !genere || !language || !cover_url || !description || !user_id) {
             return res.status(400).json({ message: 'All fields are required for creating a book' });
         }
-        if (
-            typeof title !== 'string' || 
+        if (typeof title !== 'string' ||
             typeof author !== 'string' || 
             typeof isbn !== 'string' || 
             typeof genere !== 'string' || 
             typeof language !== 'string' || 
             typeof cover_url !== 'string' || 
             typeof description !== 'string' || 
-            typeof owner_id !== 'string'
+            typeof user_id !== 'number'
         ) {
             return res.status(400).json({ message: 'Invalid field types' });
         }
@@ -32,11 +32,11 @@ export const validateBookMiddleware = (req: Request, res: Response, next: NextFu
             return res.status(400).json({ message: 'Book ID is required for update' });
         }
 
-        const fields = { title, author, isbn, genere, language, cover_url, description, owner_id, book_copies };
+        const fields = { title, author, isbn, genere, language, cover_url, description, user_id, book_copies };
         for (const [key, value] of Object.entries(fields)) {
             if (value !== undefined) {
                 if (
-                    (['title', 'author', 'isbn', 'genere', 'language', 'cover_url', 'description', 'owner_id'].includes(key) && typeof value !== 'string') ||
+                    (['title', 'author', 'isbn', 'genere', 'language', 'cover_url', 'description', 'user_id'].includes(key) && typeof value !== 'string') ||
                     (key === 'book_copies' && typeof value !== 'number')
                 ) {
                     return res.status(400).json({ message: `Invalid type for field ${key}` });
@@ -71,3 +71,18 @@ export const validateUserMiddleware = (req: Request, res: Response, next: NextFu
 
     next();
 };
+
+export const validateLoanMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    const { book_id, user_id, loan_date, return_date, status } = req.body;
+
+    const loanSchema = zod.object({
+        book_id: zod.string().nonempty(),
+        user_id: zod.string().nonempty(),
+        loan_date: zod.string().nonempty(),
+        return_date: zod.string().nonempty(),
+        status: zod.enum(['ongoing', 'returned', 'overdue'])
+    });
+
+    const parseResult = loanSchema.safeParse({ book_id, user_id, loan_date, return_date, status });
+    next();
+}

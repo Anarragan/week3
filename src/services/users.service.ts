@@ -12,7 +12,7 @@ export const getUsersService = async (): Promise<IUser[]> => {
     return JSON.parse(data) as IUser[];
 }
 
-export const getUserByIdService = async (id: string): Promise<IUser | null> => {
+export const getUserByIdService = async (id: number): Promise<IUser | null> => {
   const data = await fs.readFile(usersFilePath, "utf-8")
   const users = JSON.parse(data) as IUser[]
 
@@ -28,7 +28,7 @@ export const addUserService = async (newUser: IUser): Promise<IUser> => {
   return newUser
 }
 
-export const deleteUserService = async (id: string): Promise<boolean> => {
+export const deleteUserService = async (id: number): Promise<boolean> => {
   const file = await fs.readFile(usersFilePath, "utf-8")
   const users: IUser[] = JSON.parse(file)
   const index = users.findIndex((user) => user.id === id)
@@ -42,7 +42,7 @@ export const deleteUserService = async (id: string): Promise<boolean> => {
   return true
 }
 
-export const updateUserService = async (id: string, updatedUser: Partial<IUser>): Promise<IUser | null> => {
+export const updateUserService = async (id: number, updatedUser: Partial<IUser>): Promise<IUser | null> => {
   const file = await fs.readFile(usersFilePath, "utf-8")
   const users: IUser[] = JSON.parse(file)
   const index = users.findIndex((user) => user.id === id)
@@ -58,6 +58,7 @@ export const updateUserService = async (id: string, updatedUser: Partial<IUser>)
   const updated: IUser = {
     ...existingUser,
     ...updatedUser,
+    id: existingUser.id
   };
   users[index] = updated;
 
