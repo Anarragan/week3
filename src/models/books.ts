@@ -2,7 +2,7 @@ import { Model, DataTypes,  type InferAttributes, type InferCreationAttributes, 
 import { sequelize } from "../config/data_base_config.js";
 
 export interface BookAttributes {
-    id: number;
+    id?: number;
     title: string;
     author: string;
     isbn: string;
@@ -10,25 +10,13 @@ export interface BookAttributes {
     language: string;
     cover_url?: string | null;
     description?: string | null;
-    created_at: Date;
+    created_at?: Date;
     book_copies?: number | null;
 }
 
-export interface BookCreationAttributes extends Optional<BookAttributes, 'cover_url' | 'description' | 'book_copies'> {}
+export interface BookCreationAttributes extends Optional<BookAttributes, 'id' | 'cover_url' | 'description' | 'book_copies'> {}
 
-export class Book extends Model<BookAttributes, BookCreationAttributes>
-    implements BookAttributes {
-    public id!: number;
-    public title!: string;
-    public author!: string;
-    public isbn!: string;
-    public genere!: string;
-    public language!: string;
-    public cover_url!: string | null;
-    public description!: string | null;
-    public created_at!: Date;
-    public updated_at!: Date | null;
-}
+export class Book extends Model<BookAttributes, BookCreationAttributes> {}
 
 Book.init({
     id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
@@ -44,5 +32,5 @@ Book.init({
 }, {
     sequelize,
     tableName: 'books',
-    timestamps: false
+    timestamps: true
 })
