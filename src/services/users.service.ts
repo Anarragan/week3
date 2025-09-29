@@ -1,67 +1,31 @@
-import type {IUser} from "../interfaces/user.interface.js";
-import { promises as fs } from "fs";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
+import { User, type UserCreationAttributes } from "../models/users.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const usersFilePath = join(__dirname, '../models/users.json');
-
-export const getUsersService = async (): Promise<IUser[]> => {
-    const data = await fs.readFile(usersFilePath, 'utf-8');
-    return JSON.parse(data) as IUser[];
+export const getUsersService = async (): Promise<User[]> => {
+  return await User.findAll();
 }
 
-export const getUserByIdService = async (id: number): Promise<IUser | null> => {
-  const data = await fs.readFile(usersFilePath, "utf-8")
-  const users = JSON.parse(data) as IUser[]
-
-  return users.find((user) => user.id === id) || null
+export const getUserByIdService = async (id: number): Promise<User | null> => {
+  return await User.findByPk(id);
 }
 
-export const addUserService = async (newUser: IUser): Promise<IUser> => {
-  const data = await fs.readFile(usersFilePath, "utf-8")
-  const users: IUser[] = JSON.parse(data)
-  users.push(newUser)
-  await fs.writeFile(usersFilePath, JSON.stringify(users, null, 2))
-
-  return newUser
-}
+export const addUserService = async (newUser: UserCreationAttributes): Promise<User> => {
+  return await User.create(newUser);
+};
 
 export const deleteUserService = async (id: number): Promise<boolean> => {
-  const file = await fs.readFile(usersFilePath, "utf-8")
-  const users: IUser[] = JSON.parse(file)
-  const index = users.findIndex((user) => user.id === id)
-
-  if(index === -1) {
-    return false
+  const user = await User.findByPk(id);
+  if (!user) {
+    return false;
   }
-
-  users.splice(index, 1)
-  await fs.writeFile(usersFilePath, JSON.stringify(users, null, 2))
-  return true
+  await user.destroy();
+  return true;
 }
 
-export const updateUserService = async (id: number, updatedUser: Partial<IUser>): Promise<IUser | null> => {
-  const file = await fs.readFile(usersFilePath, "utf-8")
-  const users: IUser[] = JSON.parse(file)
-  const index = users.findIndex((user) => user.id === id)
-
-  if(index === -1) {
-    return null
-  }
-
-  const existingUser = users[index];
-  if (!existingUser) {
+export const updateUserService = async (id: number, updatedUser: Partial<UserCreationAttributes>): Promise<User | null> => {
+  const user = await User.findByPk(id);
+  if (!user) {
     return null;
   }
-  const updated: IUser = {
-    ...existingUser,
-    ...updatedUser,
-    id: existingUser.id
-  };
-  users[index] = updated;
-
-  await fs.writeFile(usersFilePath, JSON.stringify(users, null, 2));
-  return updated;
+  await user.update(updatedUser);
+  return user;
 }

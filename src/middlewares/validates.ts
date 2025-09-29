@@ -1,75 +1,58 @@
 import type { Request, Response, NextFunction } from "express";
-import zod, { number } from "zod";
+import zod from "zod";
 
 export const validateBookMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const { title, author, isbn, genere, language, cover_url, description, user_id, book_copies } = req.body;
-    const { id } = req.params;
-    const { method } = req;
+    const bookSchema = zod.object({
+        title: zod.string().nonempty(),
+        author: zod.string().nonempty(),
+        isbn: zod.string().nonempty(),
+        genere: zod.string().nonempty(),
+        language: zod.string().nonempty(),
+        cover_url: zod.string().url().optional(),
+        description: zod.string().max(500).optional(),
+        user_id: zod.number().min(1),
+        book_copies: zod.number().min(1).optional()
+    });
 
-    if (method === 'POST') {
-        if (!title || !author || !isbn || !genere || !language || !cover_url || !description || !user_id) {
-            return res.status(400).json({ message: 'All fields are required for creating a book' });
+    try {
+        if (req.method === "POST") {
+            req.body = bookSchema.parse(req.body);
+        } else if (req.method === "PUT") {
+            req.body = bookSchema.partial().parse(req.body);
         }
-        if (typeof title !== 'string' ||
-            typeof author !== 'string' || 
-            typeof isbn !== 'string' || 
-            typeof genere !== 'string' || 
-            typeof language !== 'string' || 
-            typeof cover_url !== 'string' || 
-            typeof description !== 'string' || 
-            typeof user_id !== 'number'
-        ) {
-            return res.status(400).json({ message: 'Invalid field types' });
-        }
-
-        if (book_copies !== undefined && typeof book_copies !== 'number') {
-            return res.status(400).json({ message: 'book_copies must be a number if provided' });
-        }
-    }
-
-    if (method === 'PUT') {
-        if (!id) {
-            return res.status(400).json({ message: 'Book ID is required for update' });
-        }
-
-        const fields = { title, author, isbn, genere, language, cover_url, description, user_id, book_copies };
-        for (const [key, value] of Object.entries(fields)) {
-            if (value !== undefined) {
-                if (
-                    (['title', 'author', 'isbn', 'genere', 'language', 'cover_url', 'description', 'user_id'].includes(key) && typeof value !== 'string') ||
-                    (key === 'book_copies' && typeof value !== 'number')
-                ) {
-                    return res.status(400).json({ message: `Invalid type for field ${key}` });
-                }
-            }
-        }
-    }
-
-    next();
+        next();
+  } catch (error: any) {
+    return res.status(400).json({
+      error: "Validation failed",
+      details: error.errors,
+    });
+  }
 };
 
 export const validateUserMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const { name, last_name, email, password_hash, phone, adress, role } = req.body;
-    
-    if (!name || !last_name || !email || !password_hash || !phone || !adress || !role) {
-        return res.status(400).json({ error: "All fields are required" });
-    }
+    const userSchema = zod.object({
+        name: zod.string().nonempty(),
+        last_name: zod.string().nonempty(),
+        email: zod.string().email(),
+        password_hash: zod.string().min(6),
+        phone: zod.string().nonempty(),
+        adress: zod.string().nonempty(),
+        role: zod.enum(["admin", "user"]),
+    });
 
-    if (typeof name !== 'string' || 
-        typeof last_name !== 'string' || 
-        typeof email !== 'string' || 
-        typeof password_hash !== 'string' || 
-        typeof phone !== 'string' || 
-        typeof adress !== 'string' || 
-        typeof role !== 'string') {
-            return res.status(400).json({ error: "Invalid field types" });
+    try {
+        if (req.method === "POST") {
+            req.body = userSchema.parse(req.body);
+        } else if (req.method === "PUT") {
+            req.body = userSchema.partial().parse(req.body);
         }
-
-    if (role !== 'admin' && role !== 'user') {
-        return res.status(400).json({ error: "Invalid role" });
-    }
-
-    next();
+        next();
+  } catch (error: any) {
+    return res.status(400).json({
+      error: "Validation failed",
+      details: error.errors,
+    });
+  }
 };
 
 export const validateLoanMiddleware = (req: Request, res: Response, next: NextFunction) => {
