@@ -78,16 +78,27 @@ export const validateBookCopyMiddleware = (req: Request, res: Response, next: Ne
 };
 
 export const validateLoanMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const { book_id, user_id, loan_date, return_date, status } = req.body;
-
+  
     const loanSchema = zod.object({
         book_id: zod.string().nonempty(),
         user_id: zod.string().nonempty(),
         loan_date: zod.string().nonempty(),
         return_date: zod.string().nonempty(),
-        status: zod.enum(['ongoing', 'returned', 'overdue'])
+        status: zod.enum(['active', 'returned', 'overdue'])
     });
 
-    const parseResult = loanSchema.safeParse({ book_id, user_id, loan_date, return_date, status });
+    try{
+        if (req.method === "POST") {
+            req.body = loanSchema.parse(req.body);
+        } else if (req.method === "PATCH") {
+            req.body = loanSchema.partial().parse(req.body);
+        }
+    } catch (error: any) {
+        return res.status(400).json({
+            error: "Validation failed",
+            details: error.errors,
+        });
+    }
+
     next();
 }

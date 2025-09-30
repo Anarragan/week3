@@ -48,5 +48,6 @@ Loan.init({
 }, {
     sequelize,
     tableName: 'loans',
-    timestamps: false,
+    timestamps: true,
+    underscored: true,
 })
