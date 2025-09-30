@@ -1,62 +1,32 @@
-import type { ILoan } from "../interfaces/loan.js";
-import { promises as fs } from "fs";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
+import { Loan, type ILoanAdd } from "../models/loans.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const loansFilePath = join(__dirname, '../models/loans.json');
-
-export async function getAllLoansService(): Promise<ILoan[]> {
-    const data = await fs.readFile(loansFilePath, 'utf-8');
-    return JSON.parse(data);
+export const getLoansService = async (): Promise<Loan[]> => {
+    return await Loan.findAll();
 }
 
-export async function getLoanByIdService(id: number): Promise<ILoan | null> {
-    const data = await fs.readFile(loansFilePath, 'utf-8');
-    const loans: ILoan[] = JSON.parse(data);
-    return loans.find(loan => loan.id === id) || null;
+export const getLoanByIdService = async (id: number): Promise<Loan | null> => {
+    return await Loan.findByPk(id);
 }
 
-export async function addLoanService(newLoan: ILoan): Promise<ILoan> {
-    const data = await fs.readFile(loansFilePath, 'utf-8');
-    const loans: ILoan[] = JSON.parse(data);
-    loans.push(newLoan);
-    await fs.writeFile(loansFilePath, JSON.stringify(loans, null, 2));
-
-    return newLoan;
+export const addLoanService = async (loanData: ILoanAdd): Promise<Loan> => {
+    const loan = await Loan.create(loanData);
+    return loan;
 }
 
-export async function updateLoanService(id: number, updateLoan: Partial<ILoan>): Promise<ILoan | null> {
-    const data = await fs.readFile(loansFilePath, 'utf-8');
-    const loans: ILoan[] = JSON.parse(data);
-    const index = loans.findIndex(loan => loan.id === id);
-    if (index === -1) return null;
-
-    const existingLoan = loans[index];
-    if (!existingLoan) {
+export const updateLoanService = async (id: number, updatedData: Partial<ILoanAdd>): Promise<Loan | null> => {
+    const loan = await Loan.findByPk(id);
+    if (!loan) {
         return null;
     }
-
-    const updatedLoan = {
-        ...existingLoan,
-        ...updateLoan,
-        id: existingLoan.id
-    };
-
-    loans[index] = updatedLoan;
-
-    await fs.writeFile(loansFilePath, JSON.stringify(loans, null, 2));
-    return updatedLoan;
+    await loan.update(updatedData);
+    return loan;
 }
 
-export async function deleteLoanService(id: number): Promise<boolean> {
-    const data = await fs.readFile(loansFilePath, 'utf-8');
-    const loans: ILoan[] = JSON.parse(data);
-    const index = loans.findIndex(loan => loan.id === id);
-    if (index === -1) return false;
-
-    loans.splice(index, 1);
-    await fs.writeFile(loansFilePath, JSON.stringify(loans, null, 2));
+export const deleteLoanService = async (id: number): Promise<boolean> => {
+    const loan = await Loan.findByPk(id);
+    if (!loan) {
+        return false;
+    }
+    await loan.destroy();
     return true;
 }

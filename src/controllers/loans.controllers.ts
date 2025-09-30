@@ -1,10 +1,9 @@
-import type { ILoan } from "../interfaces/loan.js";
 import type { Request, Response } from "express";
-import { getAllLoansService, getLoanByIdService, addLoanService, updateLoanService, deleteLoanService } from "../services/loans.service.js";
+import { getLoansService, getLoanByIdService, addLoanService, updateLoanService, deleteLoanService } from "../services/loans.service.js";
 
 export const getLoans = async (req: Request, res: Response) => {
     try {
-        const loans = await getAllLoansService();
+        const loans = await getLoansService();
         return res.status(200).json(loans);
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error" });
@@ -28,16 +27,7 @@ export const getLoanById = async (req: Request, res: Response) => {
 
 export const addLoan = async (req: Request, res: Response) => {
     try {
-        const newLoan: ILoan = {
-            id: Math.floor(Math.random() * 1000000),
-            book_id: req.body.book_id,
-            user_id: req.body.user_id,
-            loan_date: new Date(),
-            return_date: req.body.return_date,
-            status: "ongoing"
-        };
-
-        const addedLoan = await addLoanService(newLoan);
+        const addedLoan = await addLoanService(req.body);
         return res.status(201).json(addedLoan);
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error" });

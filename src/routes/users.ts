@@ -7,7 +7,7 @@ const router:Router = Router();
 router.get("/", getUsers);
 router.get("/:id", getUserById);
 router.post("/", validateUserMiddleware, addUser);
-router.put("/:id", validateUserMiddleware, updateUser);
+router.patch("/:id", validateUserMiddleware, updateUser);
 router.delete("/:id", deleteUser);
 
 export { router };

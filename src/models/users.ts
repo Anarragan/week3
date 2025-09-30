@@ -1,7 +1,7 @@
 import { Model, DataTypes, type Optional } from "sequelize";
 import { sequelize } from "../config/data_base_config.js";
 
-export interface UserAttributes {
+export interface IUser {
   id?: number; 
   name: string;
   last_name: string;
@@ -10,14 +10,14 @@ export interface UserAttributes {
   phone: string;
   adress: string;
   role: "admin" | "user";
-  created_at?: Date;
-  updated_at?: Date | null;
+  createdAt?: Date;
+  updatedAt?: Date | null;
 }
 
-export interface UserCreationAttributes
-  extends Optional<UserAttributes, "id" | "created_at" | "updated_at"> {}
+export interface IUserAdd
+  extends Optional<IUser, "id" | "createdAt" | "updatedAt"> {}
 
-export class User extends Model<UserAttributes, UserCreationAttributes> {}
+export class User extends Model<IUser, IUserAdd> {}
 
 User.init(
   {
@@ -60,12 +60,12 @@ User.init(
         isIn: [["admin", "user"]],
       }
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
     },
@@ -74,8 +74,6 @@ User.init(
     sequelize,
     tableName: "users",
     timestamps: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
     underscored: true,
   }
 );

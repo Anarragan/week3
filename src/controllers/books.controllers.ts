@@ -1,15 +1,12 @@
 import type { Request, Response } from "express";
-import { getBooksService, 
-    getBookByIdService, 
-    addBookService, 
-    deleteBookService, 
-    updateBookService } from "../services/books.service.js";
+import { getBooksService, getBookByIdService, addBookService, deleteBookService, updateBookService } from "../services/books.service.js";
 
 export const getBooks = async (req: Request, res: Response) => {
    try{
         const books = await getBooksService();
         res.status(200).json(books);
    } catch(err){
+    console.error('Error getting books:', err);
        res.status(500).json({error: "Internal Server Error"});
    }
 };

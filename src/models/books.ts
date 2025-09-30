@@ -1,7 +1,7 @@
-import { Model, DataTypes,  type InferAttributes, type InferCreationAttributes, type Optional } from "sequelize";
+import { Model, DataTypes, type Optional } from "sequelize";
 import { sequelize } from "../config/data_base_config.js";
 
-export interface BookAttributes {
+export interface IBook {
     id?: number;
     title: string;
     author: string;
@@ -10,13 +10,14 @@ export interface BookAttributes {
     language: string;
     cover_url?: string | null;
     description?: string | null;
-    created_at?: Date;
+    createdAt?: Date;
+    updatedAt?: Date | null;
     book_copies?: number | null;
 }
 
-export interface BookCreationAttributes extends Optional<BookAttributes, 'id' | 'cover_url' | 'description' | 'book_copies'> {}
+export interface IBookAdd extends Optional<IBook, 'id' | 'cover_url' | 'description' | 'book_copies' | 'updatedAt'> {}
 
-export class Book extends Model<BookAttributes, BookCreationAttributes> {}
+export class Book extends Model<IBook, IBookAdd> {}
 
 Book.init({
     id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
@@ -27,10 +28,13 @@ Book.init({
     language: { type: DataTypes.STRING, allowNull: false },
     cover_url: { type: DataTypes.STRING, allowNull: true },
     description: { type: DataTypes.TEXT, allowNull: true },
-    created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+    createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+    updatedAt: { type: DataTypes.DATE, allowNull: true },
     book_copies: { type: DataTypes.BIGINT, defaultValue: 1 }
+
 }, {
     sequelize,
     tableName: 'books',
-    timestamps: true
+    timestamps: true,
+    underscored: true,
 })

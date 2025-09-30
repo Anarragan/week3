@@ -7,7 +7,7 @@ const router:Router = Router();
 router.get('/', getBooks);
 router.get('/:id', getBookById);
 router.post('/', validateBookMiddleware, addBook);
-router.put('/:id', validateBookMiddleware, updateBook);
+router.patch('/:id', validateBookMiddleware, updateBook);
 router.delete('/:id', deleteBook);
 
 export { router };
