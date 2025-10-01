@@ -1,20 +1,38 @@
 import express from "express";
 import cors from "cors";
 import { initRoutes } from "./routes/index.js";
-import { sequelize } from "./config/data_base_config.js";
 import { connectDB } from "./config/data_base_config.js";
+import { Server } from "socket.io";
+import { createServer } from "http";
 
+//logica cors aparte
 const corsOptions = {
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-export async function initializeDatabase() {
+export async function initializeApplication() {
     try {
+        // llamado a base de datos se debe conectar en logica sepada (to improve)
         await connectDB();
-        await sequelize.authenticate();
         const app = express();
+        const httpServer = createServer(app);
+        const io = new Server(httpServer, {
+            cors: {
+                origin: corsOptions.origin,
+                methods: corsOptions.methods,
+                allowedHeaders: corsOptions.allowedHeaders,
+            }
+        });
+
+        io.on("connection", (socket) => {
+            console.log("A user connected:", socket.id);
+
+            socket.on("disconnect", () => {
+                console.log("A user disconnected:", socket.id);
+            });
+        });
         app.use(cors(corsOptions));
         app.use(express.json());
 
@@ -22,7 +40,7 @@ export async function initializeDatabase() {
         app.use('/', routes);
 
         const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
+        httpServer.listen(PORT, () => {
             console.log(`Server is running on http://localhost:${PORT}`);
         });
     } catch (error) {

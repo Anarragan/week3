@@ -80,10 +80,10 @@ export const validateBookCopyMiddleware = (req: Request, res: Response, next: Ne
 export const validateLoanMiddleware = (req: Request, res: Response, next: NextFunction) => {
   
     const loanSchema = zod.object({
-        book_id: zod.string().nonempty(),
-        user_id: zod.string().nonempty(),
-        loan_date: zod.string().nonempty(),
-        return_date: zod.string().nonempty(),
+        bookcopy_id: zod.number().int().positive(),
+        borrowed_id: zod.number().int().positive(),
+        return_date: zod.string().nonempty().datetime().optional(),
+        actual_return_date: zod.string().datetime().optional().nullable(),
         status: zod.enum(['active', 'returned', 'overdue'])
     });
 

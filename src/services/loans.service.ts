@@ -9,7 +9,15 @@ export const getLoanByIdService = async (id: number): Promise<Loan | null> => {
 }
 
 export const addLoanService = async (loanData: ILoanAdd): Promise<Loan> => {
-    const loan = await Loan.create(loanData);
+    const loanDate = loanData.loan_date ? new Date(loanData.loan_date) : new Date();
+    const returnDate = new Date(loanDate);
+    returnDate.setDate(loanDate.getDate() + 14);
+
+    const loan = await Loan.create({
+        ...loanData,
+        loan_date: loanDate,
+        return_date: returnDate,
+    });
     return loan;
 }
 

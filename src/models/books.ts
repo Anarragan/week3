@@ -2,7 +2,7 @@ import { Model, DataTypes, type Optional } from "sequelize";
 import { sequelize } from "../config/data_base_config.js";
 
 export interface IBook {
-    id?: number;
+    id: number;
     title: string;
     author: string;
     isbn: string;

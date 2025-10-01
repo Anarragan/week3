@@ -4,7 +4,7 @@ import {sequelize} from '../config/data_base_config.js';
 export interface ILoan {
     id?: number;
     bookcopy_id: number;
-    borrower_id: number;
+    borrowed_id: number;
     loan_date: Date;
     return_date: Date;
     actual_return_date?: Date | null;
@@ -20,11 +20,10 @@ Loan.init({
         type: DataTypes.BIGINT, 
         primaryKey: true,
         autoIncrement: true},
-
     bookcopy_id: {
         type: DataTypes.BIGINT, 
         allowNull: false},
-    borrower_id: {
+    borrowed_id: {
         type: DataTypes.BIGINT, 
         allowNull: false},
     loan_date: {
@@ -48,6 +47,6 @@ Loan.init({
 }, {
     sequelize,
     tableName: 'loans',
-    timestamps: true,
+    timestamps: false,
     underscored: true,
 })

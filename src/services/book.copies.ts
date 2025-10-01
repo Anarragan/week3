@@ -1,7 +1,7 @@
 import { BookCopy, type IBookCopyAdd } from "../models/book_copies.js";
 
 export const getBookCopiesService = async (): Promise<BookCopy[]> => {
-    return await BookCopy.findAll({ logging: console.log });
+    return await BookCopy.findAll();
 };
 
 export const getBookCopyByIdService = async (id: number): Promise<BookCopy | null> => {

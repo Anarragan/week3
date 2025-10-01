@@ -1,3 +1,3 @@
-import { initializeDatabase } from "./app.js";
+import { initializeApplication } from "./app.js";
 
-initializeDatabase();
+initializeApplication();
