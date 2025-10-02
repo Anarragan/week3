@@ -27,6 +27,43 @@ export const validateUserMiddleware = (req: Request, res: Response, next: NextFu
   }
 };
 
+export const validateLoginMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    const loginSchema = zod.object({
+        email: zod.string().email(),
+        password: zod.string().min(5)
+    });
+    console.log("headers:", req.headers);
+    console.log("body:", req.body);
+    try {
+        req.body = loginSchema.parse(req.body);
+        next();
+    } catch (error: any) {
+        return res.status(400).json({
+            error: "Validation failed",
+            details: error.errors,
+        });
+    }
+};
+
+export const validateRegisterMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    const registerSchema = zod.object({
+        name: zod.string().nonempty(),
+        last_name: zod.string().nonempty(),
+        email: zod.string().email(),
+        password: zod.string().min(6),
+    });
+
+    try {
+        req.body = registerSchema.parse(req.body);
+        next();
+    } catch (error: any) {
+        return res.status(400).json({
+            error: "Validation failed",
+            details: error.errors,
+        });
+    }
+};
+
 export const validateBookMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const bookSchema = zod.object({
         title: zod.string().nonempty(),

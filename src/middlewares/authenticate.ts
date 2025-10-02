@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import { verifyToken } from "../config/jwt.config.js";
 
 const authenticateMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
@@ -8,10 +9,16 @@ const authenticateMiddleware = (req: Request, res: Response, next: NextFunction)
     }
 
     const token = authHeader.split(' ')[1];
-    if (token !== '12345') {
-        return res.status(403).json({ message: 'Forbidden' });
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const user = verifyToken(token);
+
+    if (!user) {
+        return res.status(401).json({ message: 'Invalid token' });
     }
 
+    (req as any ).user = user;
     next();
 };
 

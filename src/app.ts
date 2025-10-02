@@ -1,10 +1,22 @@
 import express from "express";
-import cors from "cors";
 import { initRoutes } from "./routes/index.js";
-import { connectDB } from "./config/data_base_config.js";
-import { Server } from "socket.io";
-import { createServer } from "http";
+import { corsMiddleware } from "./config/cors.config.js";
 
+
+export const createApp = async () => {
+    const app = express();
+    app.use(corsMiddleware);
+    app.use(express.json());
+
+    const routes = await initRoutes();
+    app.use('/', routes);
+
+    return app;
+};
+
+
+
+/*
 //logica cors aparte
 const corsOptions = {
     origin: 'http://localhost:5173',
@@ -47,4 +59,4 @@ export async function initializeApplication() {
         console.error('Unable to connect to the database:', error);
         process.exit(1);
     }
-}
+}*/
