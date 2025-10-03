@@ -18,7 +18,7 @@ export interface IUserAdd
   extends Optional<IUser, "id" | "name" | "last_name" | "phone" | "adress" | "createdAt" | "updatedAt"> {}
 
 export class User extends Model<IUser, IUserAdd> {
-  /*declare id: number;
+  declare id: number;
   declare name: string;
   declare last_name: string;
   declare email: string;
@@ -27,7 +27,7 @@ export class User extends Model<IUser, IUserAdd> {
   declare adress: string;
   declare role: string;
   declare readonly createdAt: Date;
-  declare readonly updatedAt: Date;*///opcional si quiero decirle a typescript que existen pero que no sobreescriba el getter y setter de sequelize
+  declare readonly updatedAt: Date;//opcional si quiero decirle a typescript que existen pero que no sobreescriba el getter y setter de sequelize
 }
 
 User.init(
